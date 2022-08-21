@@ -11,12 +11,10 @@ btnStopEl.addEventListener('click', onStopBtnClick);
 
 let timerInterval = null;
 
-btnStopEl.setAttribute('disabled', true);
-
 function onStartBtnClick(e) {
     if (e.target) {  
-        btnStartEl.setAttribute('disabled', true);
-        btnStopEl.removeAttribute('disabled');
+        btnStartEl.disabled = true;
+        btnStopEl.disabled = false;
         timerInterval = setInterval(() => {            
             return bodyEl.style.backgroundColor = getRandomHexColor();
         }, 1000);        
@@ -25,8 +23,8 @@ function onStartBtnClick(e) {
 
 function onStopBtnClick(e) {
     if (e.target) {
-        btnStartEl.removeAttribute('disabled');
-        btnStopEl.setAttribute('disabled', true);
+        btnStartEl.disabled = false;
+        btnStopEl.disabled = true;
         clearInterval(timerInterval);
     };    
 };

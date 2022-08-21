@@ -1,5 +1,6 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import Notiflix from 'notiflix';
 
 const refs = {
     inputPicker: document.querySelector('#datetime-picker'),
@@ -18,27 +19,20 @@ refs.startBtn.addEventListener('click', () => {
 });
 
 let startTime = null;
-refs.startBtn.disabled = true;
-
 
 const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
+    enableTime: true,
+    time_24hr: true,
+    defaultDate: new Date(),
+    minuteIncrement: 1,  
 onClose(selectedDates) {
     if (selectedDates[0] < Date.now()) {
-        alert('Please select valid date in the future');
-      };
-      startTime = selectedDates[0].getTime();
-    },
-onChange(selectedDates) {
-    if (selectedDates[0] > Date.now()) {
-        refs.startBtn.disabled = false;
-    } else {
-        refs.startBtn.disabled = true;
+        Notiflix.Notify.warning('Please select valid date in the future');
+        return;
     };
-  },
+        refs.startBtn.disabled = false;
+        startTime = selectedDates[0].getTime();    
+    }, 
 };
 
 flatpickr(refs.inputPicker, options);
@@ -52,10 +46,12 @@ const timer = {
         this.isActive = false;
     },
     start() {
-        if(this.isActive) {
-        return;
+        if (this.isActive) {
+            refs.startBtn.disabled = true;
+            return;
         };
         this.isActive = true;
+        refs.inputPicker.disabled = true;
         refs.startBtn.disabled = true;
         this.intervalId = setInterval(() => {
             const currentTime = Date.now();
@@ -64,8 +60,9 @@ const timer = {
             updClockFace(time);
 
             if (deltaTime <= 1000) {
-                timer.stop();
-                alert('You won 1 000 000$. Congratulations!!!');
+                this.stop();
+                Notiflix.Notify.success('Break Time');
+                refs.inputPicker.disabled = false;
             return;
         };
         }, 1000);        
