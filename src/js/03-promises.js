@@ -17,7 +17,7 @@ function onFormSubmit(e) {
 };
 
 function generatorPromices(delay, step, amount) {
-  for (let i = 0; i < amount; i++){    
+  for (let i = 1; i <= amount; i++){    
 
     createPromise(i, delay)
       .then(({ position, delay }) => {
